@@ -21,6 +21,9 @@ vector<pair<Float_t, vector<Float_t>>> csvParse(const string &fileName) {
 }
 
 int csvWrite(const string &fileName, const vector<vector<Float_t>> &results) {
+  if (results.empty()) {
+    throw invalid_argument("Received empty results.");
+  }
   ofstream outputFile(fileName);
   // figure out how to elegantly write header
   outputFile << "#";
@@ -30,8 +33,10 @@ int csvWrite(const string &fileName, const vector<vector<Float_t>> &results) {
   outputFile << right << "Fy";
   outputFile.width(14);
   outputFile << right << "Fz";
-  outputFile.width(14);
-  outputFile << right << "Phi";
+  if (results[0].size() == 4) {
+    outputFile.width(14);
+    outputFile << right << "Phi";
+  }
   outputFile << endl;
 
   for (const auto &result : results) {

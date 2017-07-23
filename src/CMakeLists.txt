@@ -12,7 +12,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 option(CALCULATE_POTENTIAL "Calculate the coulomb Potential." OFF)
-add_definitions(-DCALCULATE_POTENTIAL=${CALCULATE_POTENTIAL})
+if(CALCULATE_POTENTIAL)
+   add_definitions(-DCALCULATE_POTENTIAL)
+endif()
 
 option(DOUBLE_PRECISION "Set the precision to double." OFF)
 if(DOUBLE_PRECISION)
@@ -26,5 +28,6 @@ set(COULOMBSOLVER_SOURCES ../include/mathHelpers.hpp ../include/float_t.hpp ../i
    mathHelpers.cpp csv.cpp coulombSolver.cpp)
 add_library(_coulombSolver STATIC ${COULOMBSOLVER_SOURCES})
 set(SOURCES main.cpp)
+set(EXECUTABLE_OUTPUT_PATH "../bin")
 add_executable(coulombSolver ${SOURCES})
 target_link_libraries(coulombSolver _coulombSolver)

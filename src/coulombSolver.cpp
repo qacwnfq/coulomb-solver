@@ -4,19 +4,26 @@
 #include "coulombSolver.hpp"
 #include "mathHelpers.hpp"
 
+#ifdef CALCULATE_POTENTIAL
+#define FORCE_SIZE 4
+#else
+#define FORCE_SIZE 3
+#endif
+
 using namespace std;
 
 vector<Float_t> force(const size_t &i,
                       const vector<pair<Float_t, vector<Float_t>>> &particles) {
-  vector<Float_t> force(4, Float_t(0));
+  vector<Float_t> force(FORCE_SIZE, Float_t(0));
   for (size_t j = 0; j < particles.size(); j++) {
     if (i == j) {
       continue;
     }
     Float_t dist = distance(particles[i].second, particles[j].second);
+#ifdef CALCULATE_POTENTIAL
     Float_t potential = particles[j].first / dist;
-    // TODO potential switch
     force[3] += potential;
+#endif
     Float_t prefactor =
         (particles[i].first * particles[j].first) / pow(dist, 3);
     for (size_t k = 0; k < 3; k++) {
@@ -47,7 +54,9 @@ forces(const vector<pair<Float_t, vector<Float_t>>> &particles) {
   for (size_t i = 0; i < particles.size(); i++) {
     forces[i] = force(i, particles);
   }
+#ifdef CALCULATE_POTENTIAL
   energy(particles, forces);
+#endif
   return forces;
 }
 }
