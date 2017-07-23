@@ -31,7 +31,3 @@
 *.out
 *.app
 
-# Directories
-/build
-/bin
-/data
